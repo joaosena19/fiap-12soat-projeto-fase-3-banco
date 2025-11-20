@@ -104,11 +104,5 @@ variable "subnet_ids" {
 variable "terraform_state_bucket" {
   description = "Nome do bucket S3 onde está o state da infraestrutura"
   type        = string
-  default     = "fiap-12soat-terraform-state"
-}
-
-variable "terraform_state_key" {
-  description = "Chave do state da infraestrutura no S3"
-  type        = string
-  default     = "infra/terraform.tfstate"
+  default     = "fiap-12soat-fase3-joao-dainese"
 }
