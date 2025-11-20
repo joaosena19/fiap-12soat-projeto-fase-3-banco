@@ -5,7 +5,7 @@ provider "aws" {
     tags = {
       Project     = "fiap-12soat-fase3"
       ManagedBy   = "Terraform"
-      Component   = "Database-Aurora"
+      Component   = "Database-PostgreSQL"
     }
   }
 }
