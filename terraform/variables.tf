@@ -43,7 +43,7 @@ variable "db_port" {
 variable "backup_retention_period" {
   description = "Número de dias para reter backups automáticos"
   type        = number
-  default     = 7
+  default     = 0
 }
 
 variable "preferred_backup_window" {
