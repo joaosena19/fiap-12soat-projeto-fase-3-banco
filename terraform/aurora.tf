@@ -23,7 +23,7 @@ resource "aws_security_group" "aurora_sg" {
   }
 
   egress {
-    description = "Permitir todo tráfego de saída"
+    description = "Permitir todo trafego de saida"
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
