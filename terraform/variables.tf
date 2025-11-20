@@ -67,7 +67,7 @@ variable "skip_final_snapshot" {
 variable "postgres_engine_version" {
   description = "Versão do engine PostgreSQL"
   type        = string
-  default     = "15.4"
+  default     = "17"
 }
 
 variable "postgres_instance_class" {
