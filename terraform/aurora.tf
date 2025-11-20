@@ -8,10 +8,10 @@ data "terraform_remote_state" "infra" {
   }
 }
 
-# Security Group para o Aurora PostgreSQL
+# Security Group para o RDS PostgreSQL
 resource "aws_security_group" "aurora_sg" {
   name        = "${var.db_cluster_identifier}-sg"
-  description = "Security group para Aurora PostgreSQL Cluster"
+  description = "Security group para RDS PostgreSQL Instance"
   vpc_id      = data.terraform_remote_state.infra.outputs.vpc_principal_id
 
   ingress {
@@ -46,51 +46,41 @@ resource "aws_db_subnet_group" "aurora_subnet_group" {
   }
 }
 
-# Aurora PostgreSQL Serverless v2 Cluster
-resource "aws_rds_cluster" "aurora_cluster" {
-  cluster_identifier      = var.db_cluster_identifier
-  engine                  = "aurora-postgresql"
-  engine_mode             = "provisioned"
-  engine_version          = var.aurora_engine_version
-  database_name           = var.db_name
-  master_username         = var.db_master_username
-  master_password         = var.db_master_password
-  port                    = var.db_port
+resource "aws_db_instance" "postgres_instance" {
+  identifier     = var.db_cluster_identifier
+  engine         = "postgres"
+  engine_version = var.postgres_engine_version
+  instance_class = var.postgres_instance_class
   
-  db_subnet_group_name    = aws_db_subnet_group.aurora_subnet_group.name
-  vpc_security_group_ids  = [aws_security_group.aurora_sg.id]
-
-  # EXPRESS REQUIREMENT
-  enable_http_endpoint = true
-
-  backup_retention_period      = var.backup_retention_period
-  preferred_backup_window      = var.preferred_backup_window
-  preferred_maintenance_window = var.preferred_maintenance_window
+  allocated_storage     = var.allocated_storage
+  max_allocated_storage = var.max_allocated_storage
+  storage_type          = "gp3"
+  storage_encrypted     = true
   
-  skip_final_snapshot          = var.skip_final_snapshot
-  final_snapshot_identifier    = var.skip_final_snapshot ? null : "${var.db_cluster_identifier}-final-snapshot-${formatdate("YYYY-MM-DD-hhmm", timestamp())}"
+  db_name  = var.db_name
+  username = var.db_master_username
+  password = var.db_master_password
+  port     = var.db_port
+  
+  db_subnet_group_name   = aws_db_subnet_group.aurora_subnet_group.name
+  vpc_security_group_ids = [aws_security_group.aurora_sg.id]
 
-  serverlessv2_scaling_configuration {
-    min_capacity = var.aurora_serverless_min_capacity
-    max_capacity = var.aurora_serverless_max_capacity
-  }
-
-  tags = {
-    Name        = var.db_cluster_identifier
-  }
-}
-
-# Aurora PostgreSQL Serverless v2 Instance
-resource "aws_rds_cluster_instance" "aurora_instance" {
-  identifier         = "${var.db_cluster_identifier}-instance-1"
-  cluster_identifier = aws_rds_cluster.aurora_cluster.id
-  instance_class     = var.aurora_instance_class
-  engine             = aws_rds_cluster.aurora_cluster.engine
-  engine_version     = aws_rds_cluster.aurora_cluster.engine_version
+  backup_retention_period = var.backup_retention_period
+  backup_window          = var.preferred_backup_window
+  maintenance_window     = var.preferred_maintenance_window
+  
+  skip_final_snapshot       = var.skip_final_snapshot
+  final_snapshot_identifier = var.skip_final_snapshot ? null : "${var.db_cluster_identifier}-final-snapshot"
 
   publicly_accessible = false
-
+  
+  # Enable automated backups
+  copy_tags_to_snapshot = true
+  
+  # Performance Insights
+  performance_insights_enabled = false
+  
   tags = {
-    Name        = "${var.db_cluster_identifier}-instance-1"
+    Name = var.db_cluster_identifier
   }
 }

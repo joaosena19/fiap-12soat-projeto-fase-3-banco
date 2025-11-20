@@ -11,9 +11,9 @@ variable "project_identifier" {
 }
 
 variable "db_cluster_identifier" {
-  description = "Identificador do cluster Aurora PostgreSQL"
+  description = "Identificador da instância PostgreSQL RDS"
   type        = string
-  default     = "fiap-oficina-aurora-cluster"
+  default     = "fiap-oficina-postgres-instance"
 }
 
 variable "db_name" {
@@ -64,28 +64,28 @@ variable "skip_final_snapshot" {
   default     = true
 }
 
-variable "aurora_engine_version" {
-  description = "Versão do engine Aurora PostgreSQL"
+variable "postgres_engine_version" {
+  description = "Versão do engine PostgreSQL"
   type        = string
   default     = "15.4"
 }
 
-variable "aurora_instance_class" {
-  description = "Classe da instância Aurora (serverless v2 usa db.serverless)"
+variable "postgres_instance_class" {
+  description = "Classe da instância PostgreSQL RDS"
   type        = string
-  default     = "db.serverless"
+  default     = "db.t3.micro"
 }
 
-variable "aurora_serverless_min_capacity" {
-  description = "Capacidade mínima em ACUs (Aurora Capacity Units) para Aurora Serverless v2"
+variable "allocated_storage" {
+  description = "Storage inicial alocado em GB"
   type        = number
-  default     = 0.5
+  default     = 20
 }
 
-variable "aurora_serverless_max_capacity" {
-  description = "Capacidade máxima em ACUs para Aurora Serverless v2"
+variable "max_allocated_storage" {
+  description = "Storage máximo para auto-scaling em GB"
   type        = number
-  default     = 1.0
+  default     = 100
 }
 
 # Variáveis para consumir recursos da infraestrutura existente

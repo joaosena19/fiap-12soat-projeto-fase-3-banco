@@ -1,40 +1,35 @@
-output "aurora_cluster_id" {
-  description = "ID do cluster Aurora PostgreSQL"
-  value       = aws_rds_cluster.aurora_cluster.id
+output "postgres_instance_id" {
+  description = "ID da instância PostgreSQL RDS"
+  value       = aws_db_instance.postgres_instance.id
 }
 
-output "aurora_cluster_endpoint" {
-  description = "Endpoint de escrita do cluster Aurora"
-  value       = aws_rds_cluster.aurora_cluster.endpoint
+output "postgres_instance_endpoint" {
+  description = "Endpoint da instância PostgreSQL RDS"
+  value       = aws_db_instance.postgres_instance.endpoint
 }
 
-output "aurora_cluster_reader_endpoint" {
-  description = "Endpoint de leitura do cluster Aurora"
-  value       = aws_rds_cluster.aurora_cluster.reader_endpoint
+output "postgres_instance_port" {
+  description = "Porta da instância PostgreSQL RDS"
+  value       = aws_db_instance.postgres_instance.port
 }
 
-output "aurora_cluster_port" {
-  description = "Porta do cluster Aurora"
-  value       = aws_rds_cluster.aurora_cluster.port
-}
-
-output "aurora_database_name" {
+output "postgres_database_name" {
   description = "Nome do banco de dados"
-  value       = aws_rds_cluster.aurora_cluster.database_name
+  value       = aws_db_instance.postgres_instance.db_name
 }
 
-output "aurora_master_username" {
+output "postgres_master_username" {
   description = "Username master do banco de dados"
-  value       = aws_rds_cluster.aurora_cluster.master_username
+  value       = aws_db_instance.postgres_instance.username
   sensitive   = true
 }
 
-output "aurora_security_group_id" {
-  description = "ID do Security Group do Aurora"
+output "postgres_security_group_id" {
+  description = "ID do Security Group do PostgreSQL"
   value       = aws_security_group.aurora_sg.id
 }
 
-output "aurora_subnet_group_name" {
+output "postgres_subnet_group_name" {
   description = "Nome do DB Subnet Group"
   value       = aws_db_subnet_group.aurora_subnet_group.name
 }

@@ -1,4 +1,4 @@
-name: Deploy Aurora PostgreSQL
+name: Deploy PostgreSQL RDS
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ env:
 
 jobs:
   deploy-database:
-    name: Deploy Aurora Database
+    name: Deploy PostgreSQL Database
     runs-on: ubuntu-latest
     
     steps:
@@ -53,10 +53,10 @@ jobs:
           TF_VAR_terraform_state_bucket: ${{ secrets.TF_VAR_BUCKET_NAME }}
         run: terraform apply -auto-approve tfplan
 
-      - name: Exibir informações do Aurora
+      - name: Exibir informações do PostgreSQL
         working-directory: ./terraform
         run: |
-          echo "Aurora Cluster Endpoint:"
-          terraform output aurora_cluster_endpoint
-          echo "Aurora Database Name:"
-          terraform output aurora_database_name
+          echo "PostgreSQL Instance Endpoint:"
+          terraform output postgres_instance_endpoint
+          echo "PostgreSQL Database Name:"
+          terraform output postgres_database_name
