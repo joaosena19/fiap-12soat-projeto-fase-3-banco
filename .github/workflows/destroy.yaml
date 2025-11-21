@@ -1,4 +1,4 @@
-name: Destruir Aurora PostgreSQL
+name: Destruir PostgreSQL RDS
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ env:
 
 jobs:
   destroy:
-    name: Destruir Database
+    name: Destruir PostgreSQL Database
     runs-on: ubuntu-latest
     
     steps:
@@ -52,4 +52,4 @@ jobs:
         run: terraform destroy -auto-approve
 
       - name: Destruição completa
-        run: echo "Toda a infraestrutura do Aurora PostgreSQL foi destruída com sucesso"
+        run: echo "Toda a infraestrutura do PostgreSQL RDS foi destruída com sucesso"
